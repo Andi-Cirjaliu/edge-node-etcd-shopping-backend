@@ -6,6 +6,10 @@ const app = express();
 require('dotenv').config();
 console.log('Environment: ', process.env.NODE_ENV);
 
+// set rendering engine to ejs
+app.set('view engine', 'ejs');
+app.set('views', 'views');
+
 app.use(express.json());
 app.use(require('./shoppingRouter'));
 
