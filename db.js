@@ -1,4 +1,5 @@
 const { Etcd3 } = require('etcd3');
+const defaultItems = require('./default_shopping_items');
 
 const host = process.env.DB_HOST;
 console.log('db host: ', host);
@@ -9,35 +10,76 @@ if ( host ) {
 } else {
     client = new Etcd3();
 }
+console.log('Created an etcd client for host ', host);
 
 const getAllKeys = async () => {
+    console.log('get all keys...');
     const allFKeys = await client.getAll().keys();
     console.log('all keys:', allFKeys);
     return allFKeys;
 }
 
 const getAllValues = async () => {
+    console.log('get all keys-values...');
     const allValues = await client.getAll().strings();
     console.log('all keys-values:', allValues);
     return allValues;
 }
 
 const getKey = async (key) => {
+    console.log('get key ', key);
     const val = await client.get(key).string();
     console.log(key, ' is ', val);
     return val;
 }
 
 const setKey = async (key, value) => {
+    console.log('set ', key, ' to ', value);    
     const res = await client.put(key).value(value);
-    console.log('set ', key, ' to ', value, ' => ', res);
     return res;
 }
 
 const deleteKey = async (key) => {
+    console.log('delete ', key);    
     const res = await client.delete().key(key).exec();
     console.log('delete ', key, ' => ', res);
     return res;
+}
+
+const initDB = async () => {
+    console.log('Init DB....');
+
+    if ( ! defaultItems || defaultItems.length === 0  ) {
+        return;
+    }
+
+    let val;
+    for(item of defaultItems) {
+        val = await getKey(item.itemName);
+        if (!val) {
+          await setKey(item.itemName, item.itemQty );
+        }
+    }
+
+    // val = await getKey("apples");
+    // if (!val) {
+    //   await setKey("apples", "5");
+    // }
+
+    // val = await getKey("bananas");
+    // if (!val) {
+    //   await setKey("bananas", "4");
+    // }
+
+    // val = await getKey("kiwi");
+    // if (!val) {
+    //   await setKey("kiwi", "2");
+    // }
+
+    // val = await getKey("apricot");
+    // if (!val) {
+    //   await setKey("apricot", "4");
+    // }
 }
  
 // (async () => {
@@ -63,7 +105,11 @@ const deleteKey = async (key) => {
 // //   await client.delete().all();
 // })();
 
+// getKey('aaaa');
+// initDB(); 
+
 module.exports = {
+    initDB,
     getAllKeys,
     getAllValues,
     getKey,

@@ -1,20 +1,14 @@
 <% if ( Object.keys(items).length > 0) { %>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Item name</th>
-            <th scope="col">Quantity</th>
-        </tr>
-        </thead>
-        <tbody>
-        <%  let index = 0;
-            for ( const itemName in items ) { %>
-            <tr>
-                <th scope="row"><%= ++index %></th>
-                <td><%= itemName %></td>
-                <td><%= items[itemName] %></td>
-                <td>
+    <div class="main">
+    <ul class="list-group">
+        <% for ( const itemName in items ) { %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <%= itemName %>
+                <span class="badge badge-primary badge-pill"><%= items[itemName] %></span>
+                <span class="card__actions">
+                    <!-- <i class="fas fa-minus-square"></i>
+                    <i class="fas fa-plus-square"></i>
+                    <i class="fas fa-trash-alt"></i> -->
                     <form id="decForm" action="/shopping/dec" method="POST">
                         <input type="hidden" name="item" value="<%= itemName %>" />
                         <button type="submit"><i class="fas fa-minus-square"></i>Decrement</button>
@@ -27,12 +21,11 @@
                         <input type="hidden" name="item" value="<%= itemName %>" />
                         <button type="submit"><i class="fas fa-trash-alt"></i>Remove</button>
                     </form>
-                </td>
-                </tr>
-            
+                </span>
+            </li>
             <% } %>
-        </tbody>
-    </table>
+    </ul>
+</div>
 <% } else { %>
     <h1>No shopping items found!</h1>
 <% } %>
