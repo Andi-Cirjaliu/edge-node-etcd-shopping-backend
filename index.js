@@ -5,7 +5,7 @@ const path = require('path');
 require('dotenv').config();
 console.log('Environment: ', process.env.NODE_ENV);
 
-const db = require('./db');
+const db = require('./dbController');
 db.initDB();
 
 const app = express();

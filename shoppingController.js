@@ -1,17 +1,16 @@
-const db = require('./db');
+const db = require('./dbController');
 
 const getShopppingList = async (req, res, next) => {
     console.log('Get shopping list...');
     const result = await db.getAllValues();
     // return res.json(result);
-    return res.render('shopping/shopping', {
+    return res.render('shopping/main', {
         items: result,
         pageTitle: 'Shopping list' 
       });
 }
 
 const addShopppingItem = async (req, res, next) => { 
-    console.log('Body ', req.body); 
     const item = req.body.item;
     const qty = req.body.qty;
     console.log('Add item ', item, ' quantity ', qty);
@@ -21,18 +20,17 @@ const addShopppingItem = async (req, res, next) => {
     if ( val ) {
         //TODO handle this case
         console.log('Item ', item, ' already is in list.');
-        return res.redirect('/shopping');
+        return res.redirect('/');
     }
 
     await db.setKey(item, qty);  
     
-    res.redirect('/shopping');
+    res.redirect('/');
     // await getShopppingList(req, res, next);
 }
 
 const decQtyShopppingItem = async (req, res, next) => {
     // console.log('Params ', req.params);
-    console.log('Body ', req.body); 
     const item = req.body.item;  //req.params.item;
     console.log('Decrement quantity item ', item);
 
@@ -50,13 +48,12 @@ const decQtyShopppingItem = async (req, res, next) => {
         await db.deleteKey(item);
     }
     
-    res.redirect('/shopping');
+    res.redirect('/');
     // await getShopppingList(req, res, next);
 }
 
 const incQtyShopppingItem = async (req, res, next) => {
     // console.log('Params ', req.params);
-    console.log('Body ', req.body);
     const item = req.body.item;   //req.params.item;
     console.log('Increment quantity item ', item);
 
@@ -74,13 +71,12 @@ const incQtyShopppingItem = async (req, res, next) => {
         throw new Error('Quantity cannot be bigger than 100');
     }
     
-    res.redirect('/shopping');
+    res.redirect('/');
     // await getShopppingList(req, res, next);
 }
 
 const deleteShopppingItem = async (req, res, next) => {
     // console.log('Params ', req.params);
-    console.log('Body ', req.body);
     const item = req.body.item;       //req.params.item;
     console.log('Delete item ', item);
 
@@ -90,7 +86,7 @@ const deleteShopppingItem = async (req, res, next) => {
 
     await db.deleteKey(item);
 
-    res.redirect('/shopping');
+    res.redirect('/');
     // await getShopppingList(req, res, next);
 }
 

@@ -42,7 +42,7 @@ const setKey = async (key, value) => {
 const deleteKey = async (key) => {
     console.log('delete ', key);    
     const res = await client.delete().key(key).exec();
-    console.log('delete ', key, ' => ', res);
+    // console.log('delete ', key, ' => ', res);
     return res;
 }
 
@@ -54,32 +54,17 @@ const initDB = async () => {
     }
 
     let val;
-    for(item of defaultItems) {
+    try {
+      for (item of defaultItems) {
         val = await getKey(item.itemName);
         if (!val) {
-          await setKey(item.itemName, item.itemQty );
+          await setKey(item.itemName, item.itemQty);
         }
+      }
+    } catch (err) {
+      console.error("An error occured while initialize etcd db: ", err);
     }
 
-    // val = await getKey("apples");
-    // if (!val) {
-    //   await setKey("apples", "5");
-    // }
-
-    // val = await getKey("bananas");
-    // if (!val) {
-    //   await setKey("bananas", "4");
-    // }
-
-    // val = await getKey("kiwi");
-    // if (!val) {
-    //   await setKey("kiwi", "2");
-    // }
-
-    // val = await getKey("apricot");
-    // if (!val) {
-    //   await setKey("apricot", "4");
-    // }
 }
  
 // (async () => {

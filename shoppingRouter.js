@@ -3,7 +3,8 @@ const controller = require('./shoppingController');
 
 const router = express.Router();
 
-router.get('/shopping', controller.getShopppingList);
+router.get('/', controller.getShopppingList);
+// router.get('/shopping', controller.getShopppingList);
 
 router.post('/shopping', controller.addShopppingItem);
 
